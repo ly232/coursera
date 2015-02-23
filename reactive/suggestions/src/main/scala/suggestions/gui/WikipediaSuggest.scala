@@ -98,7 +98,7 @@ object WikipediaSuggest extends SimpleSwingApplication with ConcreteSwingApi wit
 
     // TO IMPLEMENT
     val selections: Observable[String] = button.clicks.map(
-        _ => suggestionList.selection.items.toString)
+        _ => suggestionList.listData(suggestionList.selection.leadIndex))
       
     // TO IMPLEMENT
     val pages: Observable[Try[String]] =  selections.concatRecovered(
