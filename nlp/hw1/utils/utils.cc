@@ -46,8 +46,7 @@ double InputParser::Emission(std::string x, std::string y) {
   if (tag_count_.find(y) == tag_count_.end()) {
     // No tag y appeared in training set.
     return 0;
-  } else if (word_tag_count_.find(word_tag_key) ==
-             word_tag_count_.end()) {
+  } else if (word_count_.find(x) == word_count_.end()) {
     // No word x appeared in training set. Assume x is "_RARE_".
     word_tag_key.first = "_RARE_";
     if (word_tag_count_.find(word_tag_key) == word_tag_count_.end())
@@ -82,6 +81,13 @@ void InputParser::UpdateWordTagCount(
   } else {
     tag_count_[tag] += count;
   }
+
+  // Updates word_count_ map:
+  if (word_count_.find(word) == word_count_.end()) {
+    word_count_[word] = count;
+  } else {
+    word_count_[word] += count;
+  }
   
   // Updates word_tag_count_ map:
   std::pair<std::string, std::string> word_tag_key =
@@ -105,7 +111,7 @@ void SimpleTagger::Load(char* counts_file, char* dev_file) {
   while (getline(input, word)) {
     if (word.size() == 0) continue;  // Skip newline.
     // Compute y* = argmax_y { e(x | y) } by linear scan.
-    std::string opt_tag;
+    std::string opt_tag = *input_parser_.tags().begin();
     double opt_emission = 0;
     for (const auto& tag : input_parser_.tags()) {
       double emission = input_parser_.Emission(word, tag);

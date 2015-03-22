@@ -51,6 +51,9 @@ private:
   // Counts tag occurrences.
   std::unordered_map<std::string, int> tag_count_;
 
+  // Counts word occurrences.
+  std::unordered_map<std::string, int> word_count_;
+
   // Counts word-tag occurrences.
   std::map<std::pair<std::string, std::string>, int>
       word_tag_count_;
