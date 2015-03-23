@@ -27,7 +27,7 @@ public:
    * or format:
    *   6706 3-GRAM O I-GENE O
    */
-  void Load(char* filename);
+  HiddenMarkovModel(char* filename);
   
   /*
    * Returns emission parameter
@@ -43,9 +43,14 @@ public:
   double QProb(std::string yi, std::string yi2, std::string yi1);
 
   /*
-   * Returns all possible tag names.
+   * Returns all possible tag names in training set.
    */
   const std::unordered_set<std::string>& tags();
+
+  /*
+   * Returns all possible words in training set.
+   */
+  const std::unordered_set<std::string>& words();
 private:
   /* 
    * Updates tag_count_ and word_tag_count_.
@@ -78,6 +83,9 @@ private:
 
   // All tags seen in training set.
   std::unordered_set<std::string> tags_;
+
+  // All words seen in training set.
+  std::unordered_set<std::string> words_;
 };
 }  // namespace coursera_nlp
 

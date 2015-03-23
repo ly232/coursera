@@ -13,7 +13,7 @@
 
 namespace coursera_nlp {
 
-void HiddenMarkovModel::Load(char* filename) {
+HiddenMarkovModel::HiddenMarkovModel(char* filename) {
   std::string line;
   std::ifstream input(filename);
   if (!input.is_open()) {
@@ -71,6 +71,10 @@ const std::unordered_set<std::string>& HiddenMarkovModel::tags() {
   return tags_;
 }
 
+const std::unordered_set<std::string>& HiddenMarkovModel::words() {
+  return words_;
+}
+
 void HiddenMarkovModel::UpdateWordTagCount(
     const std::vector<std::string>& tokens) {
   /*
@@ -84,6 +88,7 @@ void HiddenMarkovModel::UpdateWordTagCount(
   const std::string& word = tokens[3];
 
   tags_.insert(tag);
+  words_.insert(word);
 
   // Updates tag_count_ map:
   if (tag_count_.find(tag) == tag_count_.end()) {
