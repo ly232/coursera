@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
     coursera_nlp::SimpleTagger simple_tagger;
     simple_tagger.Load(count_file, dev_file);
     simple_tagger.GenerateTaggerOutput(dev_file, simple_tagger_file);
-	  return 0;
+    return 0;
   } catch (std::string e) {
     std::cerr << "Exception: " << e << std::endl;
 	  return 1;

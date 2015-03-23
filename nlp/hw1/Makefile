@@ -1,5 +1,5 @@
 CC = g++
-FLAGS += -std=c++11 -I. -I./hmm -I./tagger
+FLAGS += -std=c++11 -I.
 
 all: main.out eval_gene_tagger_dev
 
