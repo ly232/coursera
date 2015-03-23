@@ -1,13 +1,16 @@
 CC = g++
-FLAGS += -std=c++11 -I. -I./utils
+FLAGS += -std=c++11 -I. -I./hmm -I./tagger
 
 all: main.out eval_gene_tagger_dev
 
-main.out: main.cc utils.o
-	$(CC) $(FLAGS) -o main.out main.cc utils.o
+main.out: main.cc hmm.o tagger.o
+	$(CC) $(FLAGS) -o main.out main.cc hmm.o tagger.o
 
-utils.o:
-	$(CC) $(FLAGS) -c utils/utils.cc
+hmm.o:
+	$(CC) $(FLAGS) -o hmm.o -c hmm/hmm.cc
+
+tagger.o:
+	$(CC) $(FLAGS) -o tagger.o -c tagger/simple_tagger.cc
 
 rare_converter.out: rare_word_converter.cc
 	$(CC) $(FLAGS) -o rare_converter.out rare_word_converter.cc
@@ -31,6 +34,4 @@ eval_gene_tagger_dev: gene_dev.p1.out
 	python provided/script/eval_gene_tagger.py provided/data/gene.key provided/data/gene_dev.p1.out
 
 clean:
-	rm -rf *.out *.o *.stackdump *~ *# \
-	provided/data/gene.rare.train provided/data/gene.rare.counts provided/data/gene_dev.p1.out \
-	provided/data/gene_test.p1.out
+	rm -rf *.out *.o *.stackdump *~ *# provided/data/*.rare.* provided/data/*.out

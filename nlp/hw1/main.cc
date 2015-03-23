@@ -11,7 +11,8 @@
 #include <cstring>
 #include <iostream>
  
-#include "utils.h"
+#include "hmm/hmm.h"
+#include "tagger/simple_tagger.h"
 
 int main(int argc, char** argv) {
   try {
