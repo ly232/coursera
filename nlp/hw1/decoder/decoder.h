@@ -21,7 +21,7 @@ public:
   Decoder() {};
   virtual ~Decoder() {};
   virtual void Train(char* count_file) = 0;
-  virtual void Decode(const Sentence& sentence, Tags* tags) const = 0;
+  virtual void Decode(const Sentence& sentence, Tags* tags) = 0;
 };
 }  // namespace coursera_nlp
 

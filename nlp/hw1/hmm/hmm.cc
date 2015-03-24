@@ -87,7 +87,7 @@ void HiddenMarkovModel::UpdateWordTagCount(
   const std::string& tag = tokens[2];
   const std::string& word = tokens[3];
 
-  tags_.insert(tag);
+  if (tag != "*" && tag != "STOP") tags_.insert(tag);
   words_.insert(word);
 
   // Updates tag_count_ map:

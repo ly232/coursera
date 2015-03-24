@@ -9,7 +9,8 @@
 #include <vector>
 
 #include "tagger/tagger.h"
-#include "tagger/decoder/emission_decoder.h"
+#include "decoder/emission_decoder.h"
+#include "decoder/viterbi_decoder.h"
 
 namespace coursera_nlp {
 
@@ -17,6 +18,7 @@ Tagger::Tagger(const std::string& decoder) : decoder_type_ (decoder) {}
 
 void Tagger::Train(char* training_file) {
   if (decoder_type_ == "emission") decoder_.reset(new EmissionDecoder);
+  else if (decoder_type_ == "viterbi") decoder_.reset(new ViterbiDecoder);
   else throw "Tagger::Train: unrecognized decoder " + decoder_type_;
   decoder_->Train(training_file);
 }
@@ -58,4 +60,3 @@ void Tagger::WriteDecodedTagsResult(
   }
 }
 }  // namespace coursera_nlp
-

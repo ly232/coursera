@@ -3,12 +3,7 @@
  * Emission decoder implementation.
  */
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <vector>
-
-#include "tagger/decoder/emission_decoder.h"
+#include "decoder/emission_decoder.h"
 
 namespace coursera_nlp {
 
@@ -30,7 +25,7 @@ void EmissionDecoder::Train(char* count_file) {
 }
 
 void EmissionDecoder::Decode(
-    const Sentence& sentence, Tags* tags) const {
+    const Sentence& sentence, Tags* tags) {
   for (const auto& word : sentence) {
     std::string key = word;
     if (cache_.find(word) == cache_.end()) key = "_RARE_";

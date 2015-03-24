@@ -6,7 +6,7 @@
 #ifndef COURSERA_NLP_HW1_TAGGER_H_
 #define COURSERA_NLP_HW1_TAGGER_H_
 
-#include "tagger/decoder/decoder.h"
+#include "decoder/decoder.h"
 
 namespace coursera_nlp {
 

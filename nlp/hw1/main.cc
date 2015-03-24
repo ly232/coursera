@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
     char* count_file;
     char* dev_file;
     char* out_file;
+    char* decoder_type;
     bool rare = false;
     for (int i=1; i<argc; i++) {
       char* option = argv[i];
@@ -34,6 +35,10 @@ int main(int argc, char** argv) {
         out_file = argv[++i];
         continue;
       }
+      if (!strcmp(option,"--decoder")) {
+        decoder_type = argv[++i];
+        continue;
+      }
       if (!strcmp(option,"--help")) {
         std::cout << "Example invocation:" << std::endl;
         std::cout << "main.out --count_file gene.rare.counts "
@@ -44,9 +49,10 @@ int main(int argc, char** argv) {
         return 0;
       }
     }
-    coursera_nlp::Tagger emission_tagger("emission");
-    emission_tagger.Train(count_file);
-    emission_tagger.Tag(dev_file, out_file);
+    std::string decoder(decoder_type);
+    coursera_nlp::Tagger tagger(decoder);
+    tagger.Train(count_file);
+    tagger.Tag(dev_file, out_file);
     return 0;
   } catch (std::string e) {
     std::cerr << "Exception: " << e << std::endl;
