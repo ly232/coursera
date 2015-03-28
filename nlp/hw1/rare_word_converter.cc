@@ -6,6 +6,7 @@
  */
 
 #include <cstdlib>
+#include <cctype>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -15,6 +16,17 @@
 #include <unordered_set>
 
 using namespace std;
+
+bool ContainsNumber(const string& word) {
+  return std::string::npos != word.find_first_of("0123456789");
+}
+
+bool AllCapitals(const string& word) {
+  for (const auto& c : word) {
+    if (!isupper(c)) return false;
+  }
+  return true;
+}
 
 int main(int argc, char** argv) {
   int threashold = atoi(argv[1]);
@@ -47,9 +59,18 @@ int main(int argc, char** argv) {
       output << line << endl;
     } else {
       vector<string> tokens;
-      while (ss >> word) tokens.push_back(word);
+      string token;
+      while (ss >> token) tokens.push_back(token);
       stringstream newss;
-      newss << "_RARE_";
+      if (ContainsNumber(word)) {
+        newss << "_NUMERIC_";
+      } else if (AllCapitals(word)) {
+        newss << "_ALLCAPITALS_";
+      } else if (isupper(word[word.size() - 1])) {
+        newss << "_ENDCAPITAL_";
+      } else {
+        newss << "_RARE_";
+      }
       for (const auto& entry : tokens) newss << " " << entry;
       output << newss.str() << endl;
     }
