@@ -15,29 +15,33 @@ object Calculator {
   }
 
   def eval(expr: Expr, references: Map[String, Signal[Expr]]): Double = {
-    var pendingRefs: Set[String] = Set()
-    def evalHelper(expr: Expr, references: Map[String, Signal[Expr]]): Double = {
+    def evalHelper(expr: Expr, references: Map[String, Signal[Expr]],
+        pendingRefs: Set[String]): Double = {
       expr match {
         case Literal(v) => v
         case Ref(name) => {
           if (pendingRefs.contains(name)) Double.NaN
           else {
-            pendingRefs += name
-            evalHelper(getReferenceExpr(name, references), references)
+            evalHelper(getReferenceExpr(name, references), references,
+                pendingRefs + name)
           }
         }
         case Plus(a, b) =>
-          evalHelper(a, references) + evalHelper(b, references)
+          evalHelper(a, references, pendingRefs) +
+          evalHelper(b, references, pendingRefs)
         case Minus(a, b) =>
-          evalHelper(a, references) - evalHelper(b, references)
+          evalHelper(a, references, pendingRefs) -
+          evalHelper(b, references, pendingRefs)
         case Times(a, b) =>
-          evalHelper(a, references) * evalHelper(b, references)
+          evalHelper(a, references, pendingRefs) *
+          evalHelper(b, references, pendingRefs)
         case Divide(a, b) =>
-          evalHelper(a, references) / evalHelper(b, references)
+          evalHelper(a, references, pendingRefs) /
+          evalHelper(b, references, pendingRefs)
         case _ => Double.NaN
       }
     }
-    evalHelper(expr, references)
+    evalHelper(expr, references, Set[String]())
   }
 
   /** Get the Expr for a referenced variables.
