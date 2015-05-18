@@ -50,7 +50,7 @@ object BinaryTreeSet {
 }
 
 
-class BinaryTreeSet extends Actor {
+class BinaryTreeSet extends Actor with Stash {
   import BinaryTreeSet._
   import BinaryTreeNode._
 
@@ -66,15 +66,29 @@ class BinaryTreeSet extends Actor {
 
   // optional
   /** Accepts `Operation` and `GC` messages. */
-  val normal: Receive = { case _ => ??? }
+  val normal: Receive = {
+    case GC => {
+      val newRoot = createRoot
+      root ! CopyTo(newRoot)
+      context.become(garbageCollecting(newRoot))
+    }
+    case op => root ! op
+  }
 
   // optional
   /** Handles messages while garbage collection is performed.
     * `newRoot` is the root of the new binary tree where we want to copy
     * all non-removed elements into.
     */
-  def garbageCollecting(newRoot: ActorRef): Receive = ???
-
+  def garbageCollecting(newRoot: ActorRef): Receive = {
+    case CopyFinished => {
+      root ! PoisonPill
+      root = newRoot
+      context.become(normal)
+      unstashAll()
+    }
+    case op => stash()
+  }
 }
 
 object BinaryTreeNode {
@@ -95,19 +109,79 @@ class BinaryTreeNode(val elem: Int, initiallyRemoved: Boolean) extends Actor {
 
   var subtrees = Map[Position, ActorRef]()
   var removed = initiallyRemoved
+  
+  def createNode(elem: Int): ActorRef =
+    context.actorOf(BinaryTreeNode.props(elem, initiallyRemoved = false))
+    
+  def decideLeftRight(elem: Int): Position =
+    if (this.elem > elem) Left
+    else if (this.elem < elem) Right
+    else throw new Exception("Duplicate element: " + s"$elem")
+  
+  // Looks up children nodes and perform specified callbacks.
+  def lookupAndDo(
+      elem: Int, id: Int, someCallback: ActorRef => Unit,
+      noneCallback: Position => Unit): Unit = {
+      val pos = decideLeftRight(elem)
+      subtrees.get(pos) match {
+        case Some(child) => someCallback(child)
+        case None => noneCallback(pos)
+      }
+    }
 
   // optional
   def receive = normal
 
   // optional
   /** Handles `Operation` messages and `CopyTo` requests. */
-  val normal: Receive = { case _ => ??? }
+  val normal: Receive = {
+    case Insert(requester, id, elem) => {
+      if (elem == this.elem) {
+        removed = false
+        requester ! OperationFinished(id);
+      }
+      else lookupAndDo(
+            elem, id, child => child ! Insert(requester, id, elem),
+            pos => {
+              subtrees = subtrees.updated(pos, createNode(elem));
+            requester ! OperationFinished(id)})
+    }
+    case Contains(requester, id, elem) => {
+      if (elem == this.elem) requester ! ContainsResult(id, !removed)
+      else lookupAndDo(
+          elem, id, child => child ! Contains(requester, id, elem),
+          _ => requester ! ContainsResult(id, false))
+    }
+    case Remove(requester, id, elem) => {
+      if (elem == this.elem) {
+        removed = true
+        requester ! OperationFinished(id);
+      }
+      else lookupAndDo(
+            elem, id, child => child ! Remove(requester, id, elem),
+            _ => requester ! OperationFinished(id))
+    }
+    case OperationFinished(id) => sender ! OperationFinished(id)
+    case CopyTo(treeNode) => {
+      if (!removed) treeNode ! Insert(self, elem, elem)
+      subtrees foreach { case (_, child) => child ! CopyTo(treeNode) }
+      context.become(copying(subtrees.values.toSet, removed))
+    }
+  }
 
   // optional
   /** `expected` is the set of ActorRefs whose replies we are waiting for,
     * `insertConfirmed` tracks whether the copy of this node to the new tree has been confirmed.
     */
-  def copying(expected: Set[ActorRef], insertConfirmed: Boolean): Receive = ???
+  def copying(expected: Set[ActorRef], insertConfirmed: Boolean): Receive = {
+    if (expected.isEmpty && insertConfirmed) {
+      context.parent ! CopyFinished
+      normal
+    } else {
+      case OperationFinished(id) if (id == elem) => context.become(copying(expected, true))
+      case CopyFinished => context.become(copying(expected - sender, insertConfirmed))
+    }
+  }
 
 
 }
