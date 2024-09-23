@@ -103,6 +103,8 @@ public class MatrixMultiplyTest extends TestCase {
         final long seqTime = (seqEndTime - seqStartTime) / REPEATS;
         final long parTime = (parEndTime - parStartTime) / REPEATS;
 
+        System.err.println(String.format("seq: %s, par: %s", seqTime, parTime));
+
         return (double)seqTime / (double)parTime;
     }
 
