@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: edu.coursera.concurrent.BoruvkaPerformanceTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 66.815 sec <<< FAILURE! - in edu.coursera.concurrent.BoruvkaPerformanceTest
+testInputUSAroadFLA(edu.coursera.concurrent.BoruvkaPerformanceTest)  Time elapsed: 27.085 sec  <<< ERROR!
+java.lang.AssertionError
+	at edu.coursera.concurrent.BoruvkaPerformanceTest.driver(BoruvkaPerformanceTest.java:93)
+	at edu.coursera.concurrent.BoruvkaPerformanceTest.testInputUSAroadFLA(BoruvkaPerformanceTest.java:108)
+
+testInputUSAroadNE(edu.coursera.concurrent.BoruvkaPerformanceTest)  Time elapsed: 39.698 sec  <<< ERROR!
+java.lang.AssertionError
+	at edu.coursera.concurrent.BoruvkaPerformanceTest.driver(BoruvkaPerformanceTest.java:93)
+	at edu.coursera.concurrent.BoruvkaPerformanceTest.testInputUSAroadNE(BoruvkaPerformanceTest.java:119)
+

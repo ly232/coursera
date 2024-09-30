@@ -1,6 +1,10 @@
 package edu.coursera.concurrent;
 
+import static edu.rice.pcdp.PCDP.finish;
+
 import edu.rice.pcdp.Actor;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * An actor-based implementation of the Sieve of Eratosthenes.
@@ -19,7 +23,23 @@ public final class SieveActor extends Sieve {
      */
     @Override
     public int countPrimes(final int limit) {
-        throw new UnsupportedOperationException();
+        // final List<Integer> localPrimes = new ArrayList<Integer>();
+        // localPrimes.add(2);
+        final SieveActorActor actor = new SieveActorActor(2, limit);
+        finish(() -> {
+            for (int i = 3; i < limit; ++i) {
+                actor.send(i);
+            }
+            actor.send(0);
+        });
+
+        int cnt = 0;
+        SieveActorActor currActor = actor;
+        while (currActor != null) {
+            cnt += 1;
+            currActor = currActor.getNextActor();
+        }
+        return cnt;
     }
 
     /**
@@ -27,6 +47,19 @@ public final class SieveActor extends Sieve {
      * parallel.
      */
     public static final class SieveActorActor extends Actor {
+        private final int seedPrime;
+        private final int limit;
+        private SieveActorActor nextActor = null;
+
+        public SieveActorActor(int seedPrime, int limit) {
+            this.seedPrime = seedPrime;
+            this.limit = limit;
+        }
+
+        public SieveActorActor getNextActor() {
+            return this.nextActor;
+        }
+
         /**
          * Process a single message sent to this actor.
          *
@@ -36,7 +69,21 @@ public final class SieveActor extends Sieve {
          */
         @Override
         public void process(final Object msg) {
-            throw new UnsupportedOperationException();
+            final int candidate = (int) msg;
+            if (candidate == 0 || candidate > this.limit) {
+                // Termination case.
+                if (this.nextActor != null) {
+                    this.nextActor.send(candidate);
+                }
+                return;
+            }
+            if (candidate % this.seedPrime == 0) {
+                return;
+            } else if (this.nextActor == null) {
+                this.nextActor = new SieveActorActor(candidate, limit);
+            } else {
+                this.nextActor.send(candidate);
+            }
         }
     }
 }
