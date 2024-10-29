@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.coursera.concurrent.BoruvkaPerformanceTest" time="68.105" tests="2" errors="0" skipped="0" failures="0">
+<testsuite name="edu.coursera.distributed.FileServerTest" time="0.044" tests="8" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="23"/>
     <property name="sun.boot.library.path" value="/usr/local/Cellar/openjdk/23/libexec/openjdk.jdk/Contents/Home/lib"/>
-    <property name="maven.multiModuleProjectDirectory" value="/Users/chenwang/Desktop/github/coursera/concurrent-programming/miniproject_4"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/chenwang/Desktop/github/coursera/distributed-programming/miniproject_2"/>
     <property name="java.vm.vendor" value="Homebrew"/>
     <property name="java.vendor.url" value="https://github.com/Homebrew/homebrew-core/issues"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -13,7 +13,7 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/Users/chenwang/Desktop/github/coursera/concurrent-programming/miniproject_4"/>
+    <property name="user.dir" value="/Users/chenwang/Desktop/github/coursera/distributed-programming/miniproject_2"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="java.runtime.version" value="23"/>
     <property name="os.arch" value="x86_64"/>
@@ -61,6 +61,12 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase name="testInputUSAroadFLA" classname="edu.coursera.concurrent.BoruvkaPerformanceTest" time="27.623"/>
-  <testcase name="testInputUSAroadNE" classname="edu.coursera.concurrent.BoruvkaPerformanceTest" time="40.482"/>
+  <testcase name="testTermination" classname="edu.coursera.distributed.FileServerTest" time="0.015"/>
+  <testcase name="testNestedFileGet" classname="edu.coursera.distributed.FileServerTest" time="0.02"/>
+  <testcase name="testLargeFileGet" classname="edu.coursera.distributed.FileServerTest" time="0.001"/>
+  <testcase name="testMissingFileGet" classname="edu.coursera.distributed.FileServerTest" time="0.002"/>
+  <testcase name="testFileGet" classname="edu.coursera.distributed.FileServerTest" time="0.001"/>
+  <testcase name="testFileGets" classname="edu.coursera.distributed.FileServerTest" time="0.003"/>
+  <testcase name="testDoublyNestedFileGet" classname="edu.coursera.distributed.FileServerTest" time="0.001"/>
+  <testcase name="testMissingNestedFileGet" classname="edu.coursera.distributed.FileServerTest" time="0.001"/>
 </testsuite>

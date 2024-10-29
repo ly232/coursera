@@ -1,0 +1,88 @@
+-------------------------------------------------------------------------------
+Test set: edu.coursera.distributed.SparkTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 6, Skipped: 0, Time elapsed: 0.954 sec <<< FAILURE! - in edu.coursera.distributed.SparkTest
+testUniformTwentyThousand(edu.coursera.distributed.SparkTest)  Time elapsed: 0.459 sec  <<< ERROR!
+java.lang.UnsupportedOperationException: getSubject is supported only if a security manager is allowed
+	at java.base/javax.security.auth.Subject.getSubject(Subject.java:347)
+	at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:569)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at scala.Option.getOrElse(Option.scala:120)
+	at org.apache.spark.util.Utils$.getCurrentUserName(Utils.scala:2160)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:322)
+	at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
+	at edu.coursera.distributed.SparkTest.getSparkContext(SparkTest.java:38)
+	at edu.coursera.distributed.SparkTest.testDriver(SparkTest.java:170)
+	at edu.coursera.distributed.SparkTest.testUniformTwentyThousand(SparkTest.java:239)
+
+testUniformFiftyThousand(edu.coursera.distributed.SparkTest)  Time elapsed: 0.2 sec  <<< ERROR!
+java.lang.UnsupportedOperationException: getSubject is supported only if a security manager is allowed
+	at java.base/javax.security.auth.Subject.getSubject(Subject.java:347)
+	at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:569)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at scala.Option.getOrElse(Option.scala:120)
+	at org.apache.spark.util.Utils$.getCurrentUserName(Utils.scala:2160)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:322)
+	at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
+	at edu.coursera.distributed.SparkTest.getSparkContext(SparkTest.java:38)
+	at edu.coursera.distributed.SparkTest.testDriver(SparkTest.java:170)
+	at edu.coursera.distributed.SparkTest.testUniformFiftyThousand(SparkTest.java:250)
+
+testIncreasingTwentyThousand(edu.coursera.distributed.SparkTest)  Time elapsed: 0.033 sec  <<< ERROR!
+java.lang.UnsupportedOperationException: getSubject is supported only if a security manager is allowed
+	at java.base/javax.security.auth.Subject.getSubject(Subject.java:347)
+	at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:569)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at scala.Option.getOrElse(Option.scala:120)
+	at org.apache.spark.util.Utils$.getCurrentUserName(Utils.scala:2160)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:322)
+	at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
+	at edu.coursera.distributed.SparkTest.getSparkContext(SparkTest.java:38)
+	at edu.coursera.distributed.SparkTest.testDriver(SparkTest.java:170)
+	at edu.coursera.distributed.SparkTest.testIncreasingTwentyThousand(SparkTest.java:261)
+
+testIncreasingFiftyThousand(edu.coursera.distributed.SparkTest)  Time elapsed: 0.103 sec  <<< ERROR!
+java.lang.UnsupportedOperationException: getSubject is supported only if a security manager is allowed
+	at java.base/javax.security.auth.Subject.getSubject(Subject.java:347)
+	at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:569)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at scala.Option.getOrElse(Option.scala:120)
+	at org.apache.spark.util.Utils$.getCurrentUserName(Utils.scala:2160)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:322)
+	at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
+	at edu.coursera.distributed.SparkTest.getSparkContext(SparkTest.java:38)
+	at edu.coursera.distributed.SparkTest.testDriver(SparkTest.java:170)
+	at edu.coursera.distributed.SparkTest.testIncreasingFiftyThousand(SparkTest.java:272)
+
+testRandomTwentyThousand(edu.coursera.distributed.SparkTest)  Time elapsed: 0.034 sec  <<< ERROR!
+java.lang.UnsupportedOperationException: getSubject is supported only if a security manager is allowed
+	at java.base/javax.security.auth.Subject.getSubject(Subject.java:347)
+	at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:569)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at scala.Option.getOrElse(Option.scala:120)
+	at org.apache.spark.util.Utils$.getCurrentUserName(Utils.scala:2160)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:322)
+	at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
+	at edu.coursera.distributed.SparkTest.getSparkContext(SparkTest.java:38)
+	at edu.coursera.distributed.SparkTest.testDriver(SparkTest.java:170)
+	at edu.coursera.distributed.SparkTest.testRandomTwentyThousand(SparkTest.java:283)
+
+testRandomFiftyThousand(edu.coursera.distributed.SparkTest)  Time elapsed: 0.087 sec  <<< ERROR!
+java.lang.UnsupportedOperationException: getSubject is supported only if a security manager is allowed
+	at java.base/javax.security.auth.Subject.getSubject(Subject.java:347)
+	at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:569)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at org.apache.spark.util.Utils$$anonfun$getCurrentUserName$1.apply(Utils.scala:2160)
+	at scala.Option.getOrElse(Option.scala:120)
+	at org.apache.spark.util.Utils$.getCurrentUserName(Utils.scala:2160)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:322)
+	at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
+	at edu.coursera.distributed.SparkTest.getSparkContext(SparkTest.java:38)
+	at edu.coursera.distributed.SparkTest.testDriver(SparkTest.java:170)
+	at edu.coursera.distributed.SparkTest.testRandomFiftyThousand(SparkTest.java:294)
+
