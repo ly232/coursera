@@ -1,0 +1,63 @@
+digraph TrainingFlow {
+  rankdir=LR;
+  
+  subgraph cluster_model {
+    label="Model\n(nn.Sequential)";
+    style=filled;
+    fillcolor=lightblue;
+    params["Parameters\n(weights, biases)"];
+    forward["forward()"];
+    params -> forward;
+  }
+  
+  subgraph cluster_optimizer {
+    label="Optimizer\n(e.g., Adam)";
+    style=filled;
+    fillcolor=lightgreen;
+    opt_params["Reference to\nmodel.parameters()"];
+    step["step()"];
+    opt_params -> step;
+  }
+  
+  subgraph cluster_loss {
+    label="Loss Function\n(e.g., MSELoss)";
+    style=filled;
+    fillcolor=lightyellow;
+    loss_compute["compute loss\nand build\ncomputation graph"];
+    backward["backward()"];
+    loss_compute -> backward;
+  }
+  
+  subgraph cluster_data {
+    label="Training Data";
+    style=filled;
+    fillcolor=lightcoral;
+    features["training_features"];
+    targets["training_targets"];
+  }
+  
+  subgraph cluster_gradients {
+    label="Gradients\n(.grad attribute)";
+    style=filled;
+    fillcolor=plum;
+    grad_storage["Stored in\nparameter tensors"];
+  }
+  
+  // Data flow
+  features -> forward [label="inputs"];
+  forward -> outputs [label="model output"];
+  targets -> loss_compute [label="targets"];
+  outputs -> loss_compute [label="predictions"];
+  
+  // Backward pass
+  loss_compute -> backward [label="loss tensor"];
+  backward -> grad_storage [label="gradients via\nchain rule"];
+  
+  // Optimizer connections
+  opt_params -> params [label="references"];
+  grad_storage -> step [label="reads .grad"];
+  step -> params [label="updates"];
+  
+  // Legend
+  outputs [label="outputs", style=filled, fillcolor=white];
+}
