@@ -83,3 +83,12 @@ classDiagram
     LossFunction ..> Tensor : "produces loss"
     Tensor --o Model : "gradient backprop path"
 ```
+
+## Takeaways from Quizzes
+
+* Adam optimizer is a commonly used adaptive optimizer. It maintains per-parameter first and second moment estimates, which lets each parameter use an individual effective learning rate instead of a single fixed rate for all weights.
+* PyTorch data processing has several neat utils: [`DataLoader`](https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader), [`Dataset`](https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.Dataset), and torchvision [`transforms`](https://docs.pytorch.org/vision/stable/transforms.html).
+  - `DataLoader` wraps a `Dataset` and provides batching, shuffling, and parallel loading during iteration.
+  - `Dataset` is a base class; subclasses should implement `__len__()` and `__getitem__()` so `DataLoader` can index and batch examples.
+  - `transforms` are composable data transformations that convert raw inputs such as images or arrays into tensors, e.g. [`.ToTensor()`](https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.ToTensor.html).
+* In a CNN, the kernel size is a fixed architectural hyperparameter. The kernel/filter weights are the trainable parameters that are learned during training.
