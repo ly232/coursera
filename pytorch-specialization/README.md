@@ -84,6 +84,101 @@ classDiagram
     Tensor --o Model : "gradient backprop path"
 ```
 
+## torchvision Dataset and Dataloader
+
+`Dataset` is an abstract base class that wraps raw input data. `Dataloader` then provides an iterable interface over `Dataset` to iterate over batches of samples in the dataset. Typical developer CUJ:
+
+```python
+# Defines the dataset and dataloader classes.
+class MyDataset(Dataset):
+    @override
+    def __init__(self):
+        ...
+
+    @override
+    def __getitem__(self, index):
+        ...
+
+    @override
+    def __len__(self):
+        ...
+
+class MyDataloader(Dataloader):
+    ...
+
+# Defines preprocessing transformation functions.
+transform_fn = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(mean=..., std=...),
+])
+
+# Initialize dataset and wire preprocessing transform functions.
+dataset = MyDataset(...)
+dataset.transform = transform_fn
+
+# Encapsulate dataset to dataloader.
+dataloader = MyDataloader(dataset, batch_size=..., ...)
+
+# Iterate over samples during training:
+for epoch in epochs:
+    for batch_index, batch in enumerate(dataloader):
+        ...
+```
+
+Class UMLs:
+
+```mermaid
+classDiagram
+    class Dataset {
+        <<abstract>>
+        +__len__() int
+        +__getitem__(index) tuple
+    }
+    
+    class MyDataset {
+        -data: List
+        -transform: Compose
+        +__len__() int
+        +__getitem__(index) tuple
+    }
+    
+    class DataLoader {
+        -dataset: Dataset
+        -batch_size: int
+        -shuffle: bool
+        -num_workers: int
+        +__iter__() Iterator
+        +__next__() Batch
+    }
+    
+    class Transform {
+        <<abstract>>
+        +__call__(sample) tensor
+    }
+    
+    class Compose {
+        -transforms: List~Transform~
+        +__call__(sample) tensor
+    }
+    
+    class ToTensor {
+        +__call__(img) Tensor
+    }
+    
+    class Normalize {
+        -mean: Tensor
+        -std: Tensor
+        +__call__(tensor) Tensor
+    }
+
+    MyDataset --|> Dataset
+    DataLoader "1" --> "1" Dataset : wraps
+    MyDataset --> Compose : uses via transform
+    Compose "1" --> "*" Transform : composes
+    ToTensor --|> Transform
+    Normalize --|> Transform
+```
+
 ## Takeaways from Quizzes
 
 * Adam optimizer is a commonly used adaptive optimizer. It maintains per-parameter first and second moment estimates, which lets each parameter use an individual effective learning rate instead of a single fixed rate for all weights.
