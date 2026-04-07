@@ -187,3 +187,17 @@ classDiagram
   - `Dataset` is a base class; subclasses should implement `__len__()` and `__getitem__()` so `DataLoader` can index and batch examples.
   - `transforms` are composable data transformations that convert raw inputs such as images or arrays into tensors, e.g. [`.ToTensor()`](https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.ToTensor.html).
 * In a CNN, the kernel size is a fixed architectural hyperparameter. The kernel/filter weights are the trainable parameters that are learned during training.
+
+## Hyperparameter optimizations with Optuna
+
+* 4 key metrics for classification: accuracy, precision, recall, f1-score.
+* `Optuna` is a popular library for hyperparameter optimization and search.
+  - Core abstraction: [`Trial`](https://optuna.readthedocs.io/en/stable/reference/generated/optuna.trial.Trial.html) represents a single trial in the search
+  - Developer suggests hyperparameters using the trial API: `trial.suggest_int()`, `trial.suggest_float()`, `trial.suggest_categorical()`, etc.
+  - Developer defines an `objective_function(trial)` that: creates a model with hyperparameters from the trial, trains it, and returns a metric value to optimize (accuracy, loss, f1-score, etc.).
+  - Create and run a study:
+    ```python
+    study = optuna.create_study(direction='maximize')  # or 'minimize'
+    study.optimize(objective_function, n_trials=...)
+    ```
+  - Analyze results with: `df_trials = study.trials_dataframe()`.
