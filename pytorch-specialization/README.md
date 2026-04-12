@@ -179,8 +179,6 @@ classDiagram
     Normalize --|> Transform
 ```
 
-## Takeaways from Quizzes
-
 * Adam optimizer is a commonly used adaptive optimizer. It maintains per-parameter first and second moment estimates, which lets each parameter use an individual effective learning rate instead of a single fixed rate for all weights.
 * PyTorch data processing has several neat utils: [`DataLoader`](https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader), [`Dataset`](https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.Dataset), and torchvision [`transforms`](https://docs.pytorch.org/vision/stable/transforms.html).
   - `DataLoader` wraps a `Dataset` and provides batching, shuffling, and parallel loading during iteration.
@@ -242,3 +240,23 @@ Pipeline has the following stages:
 
    ...  # resumes training for fine-tuning.
    ```
+
+## Convolutional Neural Networks
+
+* An image has spatial dimensions `H × W` and also has `C` channels (for example RGB has `C=3`).
+* In PyTorch, common 2D convolution modules inherit from `nn.Module`, such as `nn.Conv2d`, `nn.BatchNorm2d`, and `nn.MaxPool2d`.
+* A simple CNN block often looks like:
+  ```python
+  model = nn.Sequential(
+      nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
+      nn.BatchNorm2d(num_features=out_channels),
+      nn.ReLU(),
+  )
+  ```
+* `kernel_size` controls the spatial size of the convolutional filter.
+* A `kernel_size=1` convolution is a common trick to change the number of channels while leaving spatial dimensions unchanged; it acts like a linear layer across channels.
+* `stride` and `padding` change the spatial resolution of the output feature map:
+  - `H_out = ⌊(H_in + 2P_h − K_h) / S_h⌋ + 1`
+  - `W_out = ⌊(W_in + 2P_w − K_w) / S_w⌋ + 1`
+* `padding=1` with `kernel_size=3` is a common choice to preserve spatial size when `stride=1`.
+* Note that this reduction in spatial dimension is called "stride convolution" based method. An alternative to spatial dimension resizing is by simply doing a pooling, without learned weights, e.g. `nn.AvgPool2d`.
