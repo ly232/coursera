@@ -201,3 +201,44 @@ classDiagram
     study.optimize(objective_function, n_trials=...)
     ```
   - Analyze results with: `df_trials = study.trials_dataframe()`.
+
+## Text categorization pipeline (learnings from C2M3)
+
+Pipeline has the following stages:
+1. Data cleansing: input data in csv or dataframe form. We care about 2 columns: raw text, and label. Useful tools:
+   * dataframe massaging:
+   ```python
+    unique_categories = df['category'].unique()
+
+    # Create a dictionary to map each category name to a unique integer ID.
+    cat2id = {category: i for i, category in enumerate(unique_categories)}
+
+    # Create the new 'label' column in the DataFrame by applying the mapping.
+    # The .map() function efficiently converts each category name to its corresponding integer ID.
+    df['label'] = df['category'].map(cat2id)
+
+    # Create the reverse mapping from integer ID back to the category name.
+    id2cat = {id: category for category, id in cat2id.items()}
+   ```
+2. Tokenization: `transformers.AutoTokenizer.from_pretrained(...)` gives us Hugging Face's built-in tokenizers.
+3. Batching: `transformers.DataCollatorWithPadding(tokenizer)` gives us a vstack util that batches sequences iterated from `Dataset` to batch-feed into training loop.
+4. Data loader: we then create `DataLoader(..., collate_fn=...)` to wire together above.
+5. To balance skewed distributions, we can use `sklearn.utils.class_weight.compute_class_weight()` to compute class weights (returns numpy array). Convert to tensor and wire into loss function: `class_weights = torch.tensor(class_weights, dtype=torch.float32)` then `loss_function = nn.CrossEntropyLoss(weight=class_weights)`.
+6. Parameter Efficient Fine Tuning (PEFT):
+   ```python
+   from transformers import AutoModel
+   model = AutoModel.from_pretrained("bert-base-uncased")  # or any HuggingFace model
+   
+   # Freeze all params:
+   for param in model.parameters():
+     param.requires_grad = False
+
+   # Unfreeze the last N transformer layers (example: BERT has model.bert.encoder.layer)
+   # Model structure varies: BERT uses .bert.encoder.layer, RoBERTa uses .roberta.encoder.layer
+   num_layers_to_unfreeze = 3
+   for layer in model.bert.encoder.layer[-num_layers_to_unfreeze:]:
+     for param in layer.parameters():
+       param.requires_grad = True
+
+   ...  # resumes training for fine-tuning.
+   ```
